@@ -32,8 +32,6 @@ def ver_auto(request, auto_id):
     return render(request, 'automotoraapp/ver.html', {'auto': auto})
 
 
-
-
 def editar_auto(request, auto_id):
      auto = Auto.objects.get(id=auto_id)
      if request.method == 'POST':
