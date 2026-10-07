@@ -27,18 +27,18 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    .card-title {
-      color: #ff6600;
-      font-family: 'Orbitron', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
     .card-body {
       background: rgba(0,0,0,0.6);
       border-radius: 6px;
       color: #f0f0f0;
       text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    }    
+      display: flex;
+      flex-direction: column;
+    }
+    .card-img-top {
+      height: 200px; 
+      object-fit: cover; 
+    }
     .btn-naranja {
       background: linear-gradient(45deg, #ff6600, #ff3300);
       color: #fff;
@@ -77,11 +77,10 @@
   <div class="container py-5">
     <h1 class="text-center text-white mb-5">Catálogo</h1>
 
-    <div class="row">
+    <div class="row align-items-stretch">
       {% for auto in autos %}
-        <div class="col-md-4 mb-4">
-          <div class="card h-100 shadow">
-            <!-- Imagen dinámica según marca-modelo -->
+        <div class="col-md-4 mb-4 d-flex">
+          <div class="card h-100 shadow flex-fill">
             <img src="{% static 'automotoraapp/img/' %}{{ auto.marca|lower }}-{{ auto.modelo|lower }}.png"
                 class="card-img-top"
                 alt="{{ auto.marca }} {{ auto.modelo }}">
@@ -93,17 +92,11 @@
                 Color: {{ auto.color }} <br>
                 Precio: ${{ auto.precio }}
               </p>
-            </div>
-            <div class="card-footer text-center">
-              <a href="{% url 'ver_auto' auto.id %}" class="btn btn-naranja">
-                Ver detalles
-              </a>
-              <a href="{% url 'editar_auto' auto.id %}" class="btn btn-outline-light">
-                Editar
-              </a>
-              <a href="{% url 'eliminar_auto' auto.id %}" class="btn btn-outline-danger">
-                Eliminar
-              </a>
+              <div class="mt-auto text-center">
+                <a href="{% url 'ver_auto' auto.id %}" class="btn btn-naranja">Ver detalles</a>
+                <a href="{% url 'editar_auto' auto.id %}" class="btn btn-outline-light">Editar</a>
+                <a href="{% url 'eliminar_auto' auto.id %}" class="btn btn-outline-danger">Eliminar</a>
+              </div>
             </div>
           </div>
         </div>

@@ -8,14 +8,14 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(135deg, #000 0%, #222 100%); /* fondo metálico */
+      background: linear-gradient(135deg, #000 0%, #222 100%); 
       color: #fff;
     }
     h1 {
       text-align: center;
       margin: 30px 0;
       font-family: 'Orbitron', sans-serif;
-      color: #ff6600; /* naranja deportivo */
+      color: #ff6600; 
       text-transform: uppercase;
       text-shadow: 0 3px 8px rgba(0,0,0,0.8);
     }
@@ -78,15 +78,15 @@
       {% csrf_token %}
 
       <div class="mb-3">
-        <div class="texto-actual">Marca actual: {{ auto.marca }}</div>
+        <div class="texto-actual">Marca actual: {{ auto.marca|capfirst }}</div>
         <label for="marca">Nueva Marca:</label>
-        <input type="text" id="marca" name="marca" class="form-control" value="{{ auto.marca }}" required>
+        <input type="text" id="marca" name="marca" class="form-control" value="{{ auto.marca|capfirst }}" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Modelo actual: {{ auto.modelo }}</div>
+        <div class="texto-actual">Modelo actual: {{ auto.modelo|capfirst }}</div>
         <label for="modelo">Nuevo Modelo:</label>
-        <input type="text" id="modelo" name="modelo" class="form-control" value="{{ auto.modelo }}" required>
+        <input type="text" id="modelo" name="modelo" class="form-control" value="{{ auto.modelo|capfirst }}" required>
       </div>
 
       <div class="mb-3">
@@ -96,9 +96,9 @@
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Color actual: {{ auto.color }}</div>
+        <div class="texto-actual">Color actual: {{ auto.color|capfirst }}</div>
         <label for="color">Nuevo Color:</label>
-        <input type="text" id="color" name="color" class="form-control" value="{{ auto.color }}" required>
+        <input type="text" id="color" name="color" class="form-control" value="{{ auto.color|capfirst }}" required>
       </div>
 
       <div class="mb-3">
@@ -114,7 +114,7 @@
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Tipo de combustible actual: {{ auto.tipo_combustible }}</div>
+        <div class="texto-actual">Tipo de combustible actual: {{ auto.tipo_combustible|capfirst }}</div>
         <label for="tipo_combustible">Nuevo Tipo de Combustible:</label>
         <select id="tipo_combustible" name="tipo_combustible" class="form-select" required>
             <option value="gasolina" {% if auto.tipo_combustible == "gasolina" %}selected{% endif %}>Gasolina</option>
@@ -125,7 +125,7 @@
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Transmisión actual: {{ auto.transmision }}</div>
+        <div class="texto-actual">Transmisión actual: {{ auto.transmision|capfirst }}</div>
         <label for="transmision">Nueva Transmisión:</label>
         <select id="transmision" name="transmision" class="form-select" required>
             <option value="manual" {% if auto.transmision == "manual" %}selected{% endif %}>Manual</option>
