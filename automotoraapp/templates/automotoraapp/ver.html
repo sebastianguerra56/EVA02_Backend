@@ -68,10 +68,10 @@
          class="img-fluid auto-img">
 
     <div class="informacion">
-      <p><strong>Marca:</strong> {{ auto.marca }}</p>
-      <p><strong>Modelo:</strong> {{ auto.modelo }}</p>
+      <p><strong>Marca:</strong> {{ auto.marca|capfirst }}</p>
+      <p><strong>Modelo:</strong> {{ auto.modelo|capfirst }}</p>
       <p><strong>Año:</strong> {{ auto.año }}</p>
-      <p><strong>Color:</strong> {{ auto.color }}</p>
+      <p><strong>Color:</strong> {{ auto.color|capfirst }}</p>
       <p><strong>Precio:</strong> ${{ auto.precio }}</p>
       <p><strong>Kilometraje:</strong> {{ auto.kilometraje }}</p>
       <p><strong>Tipo de Combustible:</strong> {{ auto.tipo_combustible|capfirst }}</p>
