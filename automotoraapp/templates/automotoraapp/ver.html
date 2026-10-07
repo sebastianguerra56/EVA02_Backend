@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo</title>
+</head>
+<body>
+       <div class="contenedor">
+
+        <h1>🛞 Catalogo</h1>
+        
+        {% for auto in autos %}
+
+            <div class="auto">
+
+                <h2>{{ auto.marca }} {{ auto.modelo }}</h2>
+
+                <p>
+                    Año:{{ auto.año }} 
+                    Color: {{ auto.color }}
+                    Precio: ${{ auto.precio }}
+                    Kilometraje: {{ auto.kilometraje }} km
+                    Combustible: {{ auto.tipo_combustible }}
+                    {% if auto.tipo_combustible == 'gasolina' %}
+                        ⛽ Gasolina
+                    {% elif auto.tipo_combustible == 'diesel' %}
+                        🛢️ Diesel
+                    {% endif %}
+                    Transmisión: {{ auto.transmision }}
+                    {% if auto.transmision == 'manual' %}
+                        ⚙️ Manual
+                    {% elif auto.transmision == 'automatica' %}
+                        🚗 Automática
+                    {% endif %}
+                    Número de puertas: {{ auto.numero_puertas }}
+                    Fecha de registro: {{ auto.fecha_registro }}
+                </p>
+
+
+                <div class="botones">
+
+                    <a href="{% url 'ver_auto' auto.id %}">
+                        👁️ Ver
+                    </a>
+
+                    <a href="{% url 'editar_auto' auto.id %}">
+                        ✏️ Editar
+                    </a>
+
+                    <a href="{% url 'eliminar_auto' auto.id %}">
+                        🗑️ Eliminar
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p>No existen autos registrados.</p>
+
+        {% endfor %}
+
+    </div>
+</body>
+</html>
