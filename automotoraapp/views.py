@@ -30,3 +30,38 @@ def catalogo(request):
 def ver_auto(request, auto_id):
     auto = Auto.objects.get(id=auto_id)
     return render(request, 'automotoraapp/ver.html', {'auto': auto})
+
+
+
+
+def editar_auto(request, auto_id):
+     auto = Auto.objects.get(id=auto_id)
+     if request.method == 'POST':
+         auto.marca = request.POST['marca']
+         auto.modelo = request.POST['modelo']
+         auto.año = request.POST['año']
+         auto.color = request.POST['color']
+         auto.precio = request.POST['precio']
+         auto.kilometraje = request.POST['kilometraje']
+         auto.tipo_combustible = request.POST['tipo_combustible']
+         auto.transmision = request.POST['transmision']
+         auto.numero_puertas = request.POST['numero_puertas']
+         auto.fecha_registro = request.POST['fecha_registro']
+
+         auto.save()
+
+         return redirect('inicio')
+     return render(request, 'automotoraapp/editar.html', {
+         'auto': auto
+     })
+
+def eliminar_auto(request, auto_id):
+    auto = Auto.objects.get(id=auto_id)
+
+    if request.method == 'POST':
+        auto.delete()
+        return redirect('inicio')
+
+    return render(request, 'automotoraapp/eliminar.html', {
+        'auto': auto
+    })
