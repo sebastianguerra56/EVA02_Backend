@@ -19,5 +19,5 @@ class Auto(models.Model):
         ('manual', 'Manual'),
         ('automatica', 'Automatica'),
     ])
-    numero_de_puertas = models.IntegerField()
-    fecha_de_registro = models.DateField(auto_now_add=True)
+    numero_puertas = models.IntegerField()
+    fecha_registro = models.DateField(auto_now_add=True)

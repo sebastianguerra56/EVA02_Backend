@@ -3,65 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogo</title>
+    <title>Detalles del Auto</title>
 </head>
 <body>
-       <div class="contenedor">
+    <div class="contenedor">
 
-        <h1>🛞 Catalogo</h1>
-        
-        {% for auto in autos %}
+    <h1>👁️ Detalle de auto</h1>
 
-            <div class="auto">
+    <div class="informacion">
 
-                <h2>{{ auto.marca }} {{ auto.modelo }}</h2>
+        <p>
+            <strong>Marca:</strong>
+            {{ auto.marca }}
+        </p>
 
-                <p>
-                    Año:{{ auto.año }} 
-                    Color: {{ auto.color }}
-                    Precio: ${{ auto.precio }}
-                    Kilometraje: {{ auto.kilometraje }} km
-                    Combustible: {{ auto.tipo_combustible }}
-                    {% if auto.tipo_combustible == 'gasolina' %}
-                        ⛽ Gasolina
-                    {% elif auto.tipo_combustible == 'diesel' %}
-                        🛢️ Diesel
-                    {% endif %}
-                    Transmisión: {{ auto.transmision }}
-                    {% if auto.transmision == 'manual' %}
-                        ⚙️ Manual
-                    {% elif auto.transmision == 'automatica' %}
-                        🚗 Automática
-                    {% endif %}
-                    Número de puertas: {{ auto.numero_puertas }}
-                    Fecha de registro: {{ auto.fecha_registro }}
-                </p>
+        <p>
+            <strong>Modelo:</strong>
+            {{ auto.modelo }}
+        </p>
 
+        <p>
+            <strong>Año:</strong>
+            {{ auto.año }}
+        </p>
 
-                <div class="botones">
+        <p>
+            <strong>Color:</strong>
+            {{ auto.color }}
+        </p>
 
-                    <a href="{% url 'ver_auto' auto.id %}">
-                        👁️ Ver
-                    </a>
+        <p>
+            <strong>Precio:</strong>
+            ${{ auto.precio }}
+        </p>
 
-                    <a href="{% url 'editar_auto' auto.id %}">
-                        ✏️ Editar
-                    </a>
+        <p>
+            <strong>Kilometraje:</strong>
+            {{ auto.kilometraje }}
+        </p>
 
-                    <a href="{% url 'eliminar_auto' auto.id %}">
-                        🗑️ Eliminar
-                    </a>
+        <p>
+            <strong>Tipo de Combustible:</strong>
+            {{ auto.tipo_combustible }}
+        </p>
 
-                </div>
+        <p>
+            <strong>Transmisión:</strong>
+            {{ auto.transmision }}
+        </p>
 
-            </div>
-
-        {% empty %}
-
-            <p>No existen autos registrados.</p>
-
-        {% endfor %}
+        <p>
+            <strong>Número de Puertas:</strong>
+            {{ auto.numero_puertas }}
+        </p>
 
     </div>
+
+    <a href="/" class="boton">
+        ← Volver al inicio
+    </a>
+
+</div>
+    
 </body>
 </html>

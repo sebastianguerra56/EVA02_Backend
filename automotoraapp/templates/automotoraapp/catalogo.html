@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo</title>
+</head>
+<body>
+       <div class="contenedor">
+
+        <h1>🛞 Catalogo</h1>
+        
+        {% for auto in autos %}
+
+            <div class="auto">
+
+                <h2>{{ auto.marca }} {{ auto.modelo }}</h2>
+
+                <p>
+                    Año:{{ auto.año }} 
+                </p>
+                <p>
+                    Color: {{ auto.color }}
+                </p>
+                <p>
+                    Precio: ${{ auto.precio }}
+                </p>
+
+
+                <div class="botones">
+
+                    <a href="{% url 'ver_auto' auto.id %}">
+                        👁️ Ver
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p>No existen autos registrados.</p>
+
+        {% endfor %}
+
+    </div>
+</body>
+</html>
