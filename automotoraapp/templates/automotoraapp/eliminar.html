@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliminar auto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #000 0%, #222 100%);
+      color: #fff;
+    }
+    h1 {
+      text-align: center;
+      margin: 30px 0;
+      font-family: 'Orbitron', sans-serif;
+      color: #ff3333; 
+      text-transform: uppercase;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.8);
+    }
+    .form-container {
+      background: rgba(0,0,0,0.7);
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 8px 20px rgba(255, 51, 51, 0.4); 
+      text-align: center;
+    }
+    .advertencia {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #ffcccc;
+    }
+    .detalle-auto {
+      text-align: left;
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #444;
+    }
+    .detalle-auto p {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    .detalle-auto strong {
+      color: #ff6600; 
+    }
+    .btn-rojo {
+      background: linear-gradient(45deg, #cc0000, #ff3333);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 25px;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+    .btn-rojo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(255, 51, 51, 0.6);
+      color: #fff;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #aaa;
+      text-decoration: none;
+    }
+    a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Eliminar auto</h1>
+
+  <div class="form-container">
+    <p class="advertencia">¿Estás seguro de que quieres eliminar este auto?</p>
+
+    <div class="detalle-auto">
+        <p><strong>Marca:</strong> {{ auto.marca }}</p>
+        <p><strong>Modelo:</strong> {{ auto.modelo }}</p>
+        <p><strong>Color:</strong> {{ auto.color }}</p>
+        <p><strong>Precio:</strong> ${{ auto.precio }}</p>
+        <p><strong>Año:</strong> {{ auto.año }}</p>
+        <p><strong>Kilómetros:</strong> {{ auto.kilometros }}</p>
+        <p><strong>Tipo de combustible:</strong> {{ auto.tipo_combustible }}</p>
+        <p><strong>Transmisión:</strong> {{ auto.transmision }}</p>
+        <p><strong>Número de puertas:</strong> {{ auto.numero_puertas }}</p>
+        <p><strong>Fecha de registro:</strong> {{ auto.fecha_registro }}</p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn-rojo w-100">SÍ, ELIMINAR AUTO</button>
+    </form>
+  </div>
+
+  <a href="/">← Cancelar y volver al inicio</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

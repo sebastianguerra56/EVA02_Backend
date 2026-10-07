@@ -75,7 +75,7 @@
   </nav>
 
   <div class="container py-5">
-    <h1 class="text-center text-white mb-5">🛞 Catálogo</h1>
+    <h1 class="text-center text-white mb-5">Catálogo</h1>
 
     <div class="row">
       {% for auto in autos %}
@@ -97,6 +97,12 @@
             <div class="card-footer text-center">
               <a href="{% url 'ver_auto' auto.id %}" class="btn btn-naranja">
                 Ver detalles
+              </a>
+              <a href="{% url 'editar_auto' auto.id %}" class="btn btn-outline-light">
+                Editar
+              </a>
+              <a href="{% url 'eliminar_auto' auto.id %}" class="btn btn-outline-danger">
+                Eliminar
               </a>
             </div>
           </div>

@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar auto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #000 0%, #222 100%); /* fondo metálico */
+      color: #fff;
+    }
+    h1 {
+      text-align: center;
+      margin: 30px 0;
+      font-family: 'Orbitron', sans-serif;
+      color: #ff6600; /* naranja deportivo */
+      text-transform: uppercase;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.8);
+    }
+    .form-container {
+      background: rgba(0,0,0,0.7);
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 8px 20px rgba(255, 102, 0, 0.4);
+    }
+    label {
+      font-weight: bold;
+      color: #ff6600;
+    }
+    input, select {
+      background-color: #111;
+      color: #fff;
+      border: 1px solid #444;
+    }
+    input:focus, select:focus {
+      border-color: #ff6600;
+      box-shadow: 0 0 8px rgba(255, 102, 0, 0.6);
+    }
+    .btn-naranja {
+      background: linear-gradient(45deg, #ff6600, #ff3300);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 25px;
+      transition: transform 0.2s ease;
+    }
+    .btn-naranja:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #ff6600;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .texto-actual {
+      font-size: 0.85em;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Editar auto</h1>
+
+  <div class="form-container">
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <div class="texto-actual">Marca actual: {{ auto.marca }}</div>
+        <label for="marca">Nueva Marca:</label>
+        <input type="text" id="marca" name="marca" class="form-control" value="{{ auto.marca }}" required>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Modelo actual: {{ auto.modelo }}</div>
+        <label for="modelo">Nuevo Modelo:</label>
+        <input type="text" id="modelo" name="modelo" class="form-control" value="{{ auto.modelo }}" required>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Año actual: {{ auto.año }}</div>
+        <label for="año">Nuevo Año:</label>
+        <input type="number" id="año" name="año" class="form-control" value="{{ auto.año }}" min="1900" max="2026" required>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Color actual: {{ auto.color }}</div>
+        <label for="color">Nuevo Color:</label>
+        <input type="text" id="color" name="color" class="form-control" value="{{ auto.color }}" required>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Precio actual: {{ auto.precio }}</div>
+        <label for="precio">Nuevo Precio:</label>
+        <input type="number" id="precio" name="precio" class="form-control" value="{{ auto.precio }}" min="0" step="1000" required>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Kilometraje actual: {{ auto.kilometros }}</div>
+        <label for="kilometraje">Nuevo Kilometraje:</label>
+        <input type="number" id="kilometraje" name="kilometraje" class="form-control" value="{{ auto.kilometraje }}" min="0" required>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Tipo de combustible actual: {{ auto.tipo_combustible }}</div>
+        <label for="tipo_combustible">Nuevo Tipo de Combustible:</label>
+        <select id="tipo_combustible" name="tipo_combustible" class="form-select" required>
+            <option value="gasolina" {% if auto.tipo_combustible == "gasolina" %}selected{% endif %}>Gasolina</option>
+            <option value="diésel" {% if auto.tipo_combustible == "diésel" %}selected{% endif %}>Diésel</option>
+            <option value="eléctrico" {% if auto.tipo_combustible == "eléctrico" %}selected{% endif %}>Eléctrico</option>
+            <option value="híbrido" {% if auto.tipo_combustible == "híbrido" %}selected{% endif %}>Híbrido</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Transmisión actual: {{ auto.transmision }}</div>
+        <label for="transmision">Nueva Transmisión:</label>
+        <select id="transmision" name="transmision" class="form-select" required>
+            <option value="manual" {% if auto.transmision == "manual" %}selected{% endif %}>Manual</option>
+            <option value="automática" {% if auto.transmision == "automática" %}selected{% endif %}>Automática</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Número de puertas actual: {{ auto.numero_puertas }}</div>
+        <label for="numero_puertas">Nuevo Número de Puertas:</label>
+        <input type="number" id="numero_puertas" name="numero_puertas" class="form-control" value="{{ auto.numero_puertas }}" min="2" max="5" required>
+      </div>
+
+      <div class="mb-3">
+        <div class="texto-actual">Fecha de registro actual: {{ auto.fecha_registro }}</div>
+        <label for="fecha_registro">Nueva Fecha de Registro:</label>
+        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" value="{{ auto.fecha_registro }}" required>
+      </div>
+
+      <button type="submit" class="btn-naranja w-100">GUARDAR CAMBIOS</button>
+    </form>
+  </div>
+
+  <a href="/">← Volver al inicio</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
