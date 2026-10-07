@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Eliminar auto</title>
+</head>
+
+<body>
+
+    <h1>🗑️ Eliminar auto</h1>
+
+ 
+
+    <p>
+        ¿Estás seguro de que quieres eliminar este auto?
+    </p>
+
+    <p>
+        <strong>Marca:</strong>
+        {{ auto.marca }}
+    </p>
+    
+    <p>
+        <strong>Modelo:</strong>
+        {{ auto.modelo }}
+    
+    <p>
+        <strong>Color:</strong>
+        {{ auto.color }}
+    </p>
+    <p>
+        <strong>Precio:</strong>
+        ${{ auto.precio }}
+    </p>
+    <p>
+        <strong>Año:</strong>
+        {{ auto.año }}
+    </p>
+    <p>
+        <strong>Kilómetros:</strong>
+        {{ auto.kilometros }}
+    </p>
+    <p>
+        <strong>Tipo de combustible:</strong>
+        {{ auto.tipo_combustible }}
+    </p>
+    <p>
+        <strong>Transmisión:</strong>
+        {{ auto.transmision }}
+    </p>
+    <p>
+        <strong>Numero de puertas:</strong>
+        {{ auto.numero_puertas }}
+    </p>
+    <p>
+        <strong>Fecha de registro:</strong>
+        {{ auto.fecha_registro }}
+    </p>
+
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <button type="submit">
+            Sí, eliminar
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="/">
+        ← Cancelar y volver al inicio
+    </a>
+
+</body>
+
+</html>
