@@ -1,5 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.contrib.auth import authenticate
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+
 from .models import Vehiculo
 
 # Create your views here.
@@ -64,3 +73,24 @@ def eliminar_auto(request, auto_id):
     return render(request, 'automotoraapp/eliminar.html', {
         'auto': auto
     })
+
+def login(request):
+    return render(request, 'automotoraapp/login.html')
+
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        usuario = authenticate(username=username, password=password)
+        if usuario is not None:
+            token, creado = Token.objects.get_or_create(user=usuario)
+            return Response({
+                'mensaje': 'Autenticacion correcta',
+                'usuario': usuario.username,
+                'token': token.key
+            }, status=status.HTTP_200_OK)
+        return Response({
+            'error': 'Usuario o contraseña incorrectos'             
+            }, status=status.HTTP_401_UNAUTHORIZED)
