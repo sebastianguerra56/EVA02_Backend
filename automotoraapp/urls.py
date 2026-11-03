@@ -13,4 +13,7 @@ urlpatterns = [
 
     #API login
     path('api/login/', views.LoginAPIView.as_view(), name='api_login'),
+
+    #API Listar Vehículos
+    path('api/vehiculos/', views.AutomotoraAPIView.as_view(), name='api_vehiculos'),
 ]

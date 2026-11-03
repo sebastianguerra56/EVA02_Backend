@@ -34,8 +34,7 @@ def crear_auto(request):
     return render(request, 'automotoraapp/crear.html')
 
 def catalogo(request):
-    autos = Vehiculo.objects.all()
-    return render(request, 'automotoraapp/catalogo.html', {'autos': autos})
+    return render(request, 'automotoraapp/catalogo.html')
 
 def ver_auto(request, auto_id):
     auto = Vehiculo.objects.get(id=auto_id)
@@ -94,3 +93,28 @@ class LoginAPIView(APIView):
         return Response({
             'error': 'Usuario o contraseña incorrectos'             
             }, status=status.HTTP_401_UNAUTHORIZED)
+
+class AutomotoraAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    #Get listar todos los vehículos
+    def get(self, request):
+        vehiculos = Vehiculo.objects.all()
+        datos = []
+
+        for vehiculo in vehiculos:
+            datos.append({
+                'id': vehiculo.id,
+                'marca': vehiculo.marca,
+                'modelo': vehiculo.modelo,
+                'año': vehiculo.año,
+                'color': vehiculo.color,
+                'precio': vehiculo.precio,
+                'kilometraje': vehiculo.kilometraje,
+                'tipo_combustible': vehiculo.tipo_combustible,
+                'transmision': vehiculo.transmision,
+                'numero_puertas': vehiculo.numero_puertas,
+                'fecha_registro': vehiculo.fecha_registro
+            })   
+        return Response(datos, status=status.HTTP_200_OK)

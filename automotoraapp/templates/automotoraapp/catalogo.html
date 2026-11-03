@@ -1,112 +1,404 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Catálogo</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
+
     body {
-      background: linear-gradient(135deg, #000 0%, #222 100%);
+      min-height: 100vh;
+
+      background:
+        linear-gradient(
+          135deg,
+          #000 0%,
+          #222 100%
+        );
+
       color: #fff;
     }
+
+
+    /* TÍTULO */
+
+    .titulo-catalogo {
+      font-family: 'Orbitron', sans-serif;
+
+      color: #ff6600;
+
+      text-transform: uppercase;
+
+      letter-spacing: 2px;
+
+      text-shadow:
+        0 3px 8px rgba(0,0,0,0.8);
+    }
+
+
+    /* CARDS */
+
     .card {
       background-color: #111;
+
       border: 1px solid #333;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
     }
+
+
     .card:hover {
+
       transform: scale(1.03);
-      box-shadow: 0 8px 20px rgba(255, 102, 0, 0.6); 
+
+      box-shadow:
+        0 8px 20px rgba(255,102,0,0.6);
     }
+
+
     .card-title {
-      color: #ff6600; 
+
+      color: #ff6600;
+
       font-family: 'Orbitron', sans-serif;
+
       text-transform: uppercase;
+
       letter-spacing: 1px;
     }
+
+
     .card-body {
+
       background: rgba(0,0,0,0.6);
-      border-radius: 6px;
+
       color: #f0f0f0;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+
       display: flex;
+
       flex-direction: column;
     }
+
+
+    /* IMAGEN */
+
     .card-img-top {
-      height: 200px; 
-      object-fit: cover; 
+
+      height: 200px;
+
+      object-fit: cover;
     }
+
+
+    /* BOTÓN NARANJA */
+
     .btn-naranja {
-      background: linear-gradient(45deg, #ff6600, #ff3300);
+
+      background:
+        linear-gradient(
+          45deg,
+          #ff6600,
+          #ff3300
+        );
+
       color: #fff;
+
       border: none;
+
       border-radius: 6px;
+
       padding: 8px 20px;
-      transition: transform 0.2s ease;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
     }
+
+
     .btn-naranja:hover {
+
+      color: white;
+
       transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+
+      box-shadow:
+        0 4px 12px rgba(255,102,0,0.4);
     }
+
+
+    /* MENSAJES */
+
+    #mensaje {
+
+      text-align: center;
+
+      color: #ccc;
+
+      margin-bottom: 30px;
+    }
+
+
+    .mensaje-error {
+
+      color: #ff6666 !important;
+    }
+
   </style>
 </head>
+
+
 <body>
-  <!-- Navbar -->
+
+
+  <!-- NAVBAR -->
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
     <div class="container">
-      <a class="navbar-brand fw-bold" href="{% url 'inicio' %}">Automotora</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-              data-bs-target="#navbarNav" aria-controls="navbarNav" 
-              aria-expanded="false" aria-label="Toggle navigation">
+
+      <a
+        class="navbar-brand fw-bold"
+        href="{% url 'inicio' %}"
+      >
+        Automotora
+      </a>
+
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+
         <span class="navbar-toggler-icon"></span>
+
       </button>
-      
-      <div class="collapse navbar-collapse" id="navbarNav">
+
+
+      <div
+        class="collapse navbar-collapse"
+        id="navbarNav"
+      >
+
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'catalogo' %}">Catálogo</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'crear_auto' %}">Registrar auto</a></li>
+
+          <li class="nav-item">
+
+            <a
+              class="nav-link"
+              href="{% url 'inicio' %}"
+            >
+              Inicio
+            </a>
+
+          </li>
+
+
+          <li class="nav-item">
+
+            <a
+              class="nav-link active"
+              href="{% url 'catalogo' %}"
+            >
+              Catálogo
+            </a>
+
+          </li>
+
+
+          <li class="nav-item">
+
+            <a
+              class="nav-link"
+              href="{% url 'crear_auto' %}"
+            >
+              Registrar auto
+            </a>
+
+          </li>
+
         </ul>
+
       </div>
+
     </div>
+
   </nav>
 
+
+
+  <!-- CATÁLOGO -->
+
   <div class="container py-5">
-    <h1 class="text-center text-white mb-5">Catálogo</h1>
 
-    <div class="row align-items-stretch">
-      {% for auto in autos %}
-        <div class="col-md-4 mb-4 d-flex">
-          <div class="card h-100 shadow flex-fill">
-            <img src="{% static 'automotoraapp/img/' %}{{ auto.marca|lower }}-{{ auto.modelo|lower }}.png"
-                class="card-img-top"
-                alt="{{ auto.marca }} {{ auto.modelo }}">
 
-            <div class="card-body">
-              <h5 class="card-title">{{ auto.marca }} {{ auto.modelo }}</h5>
-              <p class="card-text">
-                Año: {{ auto.año }} <br>
-                Color: {{ auto.color }} <br>
-                Precio: ${{ auto.precio }}
-              </p>
-              <div class="mt-auto text-center">
-                <a href="{% url 'ver_auto' auto.id %}" class="btn btn-naranja">Ver detalles</a>
-                <a href="{% url 'editar_auto' auto.id %}" class="btn btn-outline-light">Editar</a>
-                <a href="{% url 'eliminar_auto' auto.id %}" class="btn btn-outline-danger">Eliminar</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      {% empty %}
-        <p class="text-white">No existen autos registrados.</p>
-      {% endfor %}
+    <h1 class="titulo-catalogo text-center mb-4">
+
+      Catálogo
+
+    </h1>
+
+
+    <p id="mensaje">
+
+      Cargando vehículos...
+
+    </p>
+
+
+    <div
+      id="lista-vehiculos"
+      class="row align-items-stretch"
+    >
     </div>
+
+
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <!-- BOOTSTRAP -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+  </script>
+<script>
+    const listaVehiculos = document.getElementById('lista-vehiculos');
+    const mensaje = document.getElementById('mensaje');
+
+    async function cargarVehiculos() {
+
+        // Recuperar el token guardado durante el login
+        const token = sessionStorage.getItem('token');
+
+        // Comprobar si existe un token
+        if (!token) {
+            mensaje.textContent = 'Debes iniciar sesión para ver tus vehículos.';
+            window.location.href = '/';
+            return;
+        }
+
+        try {
+            // Consultar la API GET enviando el token
+            const respuesta = await fetch('/api/vehiculos/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${token}`
+                }
+            });
+
+            // Si la autenticación falla, volver al login
+            if (respuesta.status === 401 || respuesta.status === 403) {
+                sessionStorage.removeItem('token');
+                window.location.href = '/';
+                return;
+            }
+
+            if (!respuesta.ok) {
+                mensaje.textContent = 'Error al consultar el catálogo de vehículos.';
+                return;
+            }
+
+            // Convertir la respuesta JSON a un arreglo de JavaScript
+            const vehiculos = await respuesta.json();
+
+            // Limpiar el contenedor antes de mostrar los resultados
+            listaVehiculos.replaceChildren();
+
+            if (vehiculos.length === 0) {
+                mensaje.textContent = 'No existen vehículos registrados.';
+                return;
+            }
+
+            mensaje.textContent = '';
+
+            // Crear una tarjeta para cada vehículo recibido
+            vehiculos.forEach(vehiculo => {
+
+                const columna = document.createElement('div');
+                columna.className = 'col-md-4 mb-4 d-flex';
+
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'card h-100 shadow flex-fill';
+
+                const imagen = document.createElement('img');
+                imagen.src = `/static/automotoraapp/img/${vehiculo.marca.toLowerCase()}-${vehiculo.modelo.toLowerCase()}.png`;
+                imagen.className = 'card-img-top';
+                imagen.alt = `${vehiculo.marca} ${vehiculo.modelo}`;
+
+                const cuerpo = document.createElement('div');
+                cuerpo.className = 'card-body';
+
+                const titulo = document.createElement('h5');
+                titulo.className = 'card-title';
+                titulo.textContent = `${vehiculo.marca} ${vehiculo.modelo}`;
+
+                const informacion = document.createElement('p');
+                informacion.className = 'card-text';
+                informacion.innerHTML = `
+                    Año: ${vehiculo.año} <br>
+                    Color: ${vehiculo.color} <br>
+                    Precio: $${vehiculo.precio}`;
+
+                const botones = document.createElement('div');
+                botones.className = 'mt-auto text-center';
+
+                const ver = document.createElement('a');
+                ver.href = `/ver/${vehiculo.id}/`;
+                ver.className = 'btn btn-naranja me-1';
+                ver.textContent = 'Ver detalles';
+
+                const editar = document.createElement('a');
+                editar.href = `/editar/${vehiculo.id}/`;
+                editar.className = 'btn btn-outline-light me-1';
+                editar.textContent = 'Editar';
+
+                const eliminar = document.createElement('a');
+                eliminar.href = `/eliminar/${vehiculo.id}/`;
+                eliminar.className = 'btn btn-outline-danger';
+                eliminar.textContent = 'Eliminar';
+
+                botones.append(ver, editar, eliminar);
+                cuerpo.append(titulo, informacion, botones);
+                tarjeta.append(imagen, cuerpo);
+                columna.appendChild(tarjeta);
+
+                listaVehiculos.appendChild(columna);
+            });
+
+        } catch (error) {
+            mensaje.textContent =
+                'No se pudo conectar con el servidor.';
+            console.error('Error al cargar vehículos:', error);
+        }
+    }
+
+    // Ejecutar la consulta al cargar la página
+    cargarVehiculos();
+</script>
+
+</body>
+</html>
 </body>
 </html>
