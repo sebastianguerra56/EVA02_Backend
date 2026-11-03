@@ -182,3 +182,62 @@ class VehiculoDetalleAPIView(APIView):
         vehiculo.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+    #PUT: actualizar todos los campos editables de un vehículo
+    def put(self, request, auto_id):
+        vehiculo = get_object_or_404(Vehiculo, id=auto_id)
+
+        # Recibir los datos enviados por el cliente
+        marca = request.data.get('marca')
+        modelo = request.data.get('modelo')
+        año = request.data.get('año')
+        color = request.data.get('color')
+        precio = request.data.get('precio')
+        kilometraje = request.data.get('kilometraje')
+        tipo_combustible = request.data.get('tipo_combustible')
+        transmision = request.data.get('transmision')
+        numero_puertas = request.data.get('numero_puertas')
+
+        # Comprobar que se hayan enviado todos los campos
+        if (
+            marca is None or
+            modelo is None or
+            año is None or
+            color is None or
+            precio is None or
+            kilometraje is None or
+            tipo_combustible is None or
+            transmision is None or
+            numero_puertas is None
+        ):
+            return Response({
+                'error': 'Debes enviar todos los datos del vehículo.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Asignar los nuevos datos al vehículo
+        vehiculo.marca = marca
+        vehiculo.modelo = modelo
+        vehiculo.año = año
+        vehiculo.color = color
+        vehiculo.precio = precio
+        vehiculo.kilometraje = kilometraje
+        vehiculo.tipo_combustible = tipo_combustible
+        vehiculo.transmision = transmision
+        vehiculo.numero_puertas = numero_puertas
+
+        # Guardar los cambios en la base de datos
+        vehiculo.save()
+
+        return Response({
+            'mensaje': 'Vehículo actualizado correctamente',
+            'id': vehiculo.id,
+            'marca': vehiculo.marca,
+            'modelo': vehiculo.modelo,
+            'año': vehiculo.año,
+            'color': vehiculo.color,
+            'precio': str(vehiculo.precio),
+            'kilometraje': vehiculo.kilometraje,
+            'tipo_combustible': vehiculo.tipo_combustible,
+            'transmision': vehiculo.transmision,
+            'numero_puertas': vehiculo.numero_puertas,
+            'fecha_registro': vehiculo.fecha_registro
+        }, status=status.HTTP_200_OK)
