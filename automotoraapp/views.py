@@ -27,32 +27,15 @@ def ver_auto(request, auto_id):
 
 
 def editar_auto(request, auto_id):
-     auto = Vehiculo.objects.get(id=auto_id)
-     if request.method == 'POST':
-         auto.marca = request.POST['marca'].lower()
-         auto.modelo = request.POST['modelo'].lower()
-         auto.año = request.POST['año']
-         auto.color = request.POST['color'].lower()
-         auto.precio = request.POST['precio']
-         auto.kilometraje = request.POST['kilometraje']
-         auto.tipo_combustible = request.POST['tipo_combustible'].lower()
-         auto.transmision = request.POST['transmision'].lower()
-         auto.numero_puertas = request.POST['numero_puertas']
-         auto.fecha_registro = request.POST['fecha_registro']
+    auto = get_object_or_404(Vehiculo, id=auto_id)
 
-         auto.save()
+    return render(request, 'automotoraapp/editar.html', {
+        'auto': auto
+    })
 
-         return render(request, 'automotoraapp/confirmacion.html', {'auto': auto})
-     return render(request, 'automotoraapp/editar.html', {
-         'auto': auto
-     })
 
 def eliminar_auto(request, auto_id):
-    auto = Vehiculo.objects.get(id=auto_id)
-
-    if request.method == 'POST':
-        auto.delete()
-        return redirect('inicio')
+    auto = get_object_or_404(Vehiculo, id=auto_id)
 
     return render(request, 'automotoraapp/eliminar.html', {
         'auto': auto

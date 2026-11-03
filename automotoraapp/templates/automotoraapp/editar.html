@@ -103,7 +103,7 @@
       <div class="mb-3">
         <div class="texto-actual">Precio actual: {{ auto.precio }}</div>
         <label for="precio">Nuevo Precio:</label>
-        <input type="number" id="precio" name="precio" class="form-control" value="{{ auto.precio }}" min="0" step="1" required>
+        <input type="number" id="precio" name="precio" class="form-control" value="{{ auto.precio }}" min="0" step="1000" required>
       </div>
 
       <div class="mb-3">
@@ -141,7 +141,7 @@
       <div class="mb-3">
         <div class="texto-actual">Fecha de registro actual: {{ auto.fecha_registro }}</div>
         <label for="fecha_registro">Nueva Fecha de Registro:</label>
-        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" value="{{ auto.fecha_registro|date:'Y-m-d'  }}" readonly>
+        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" value="{{ auto.fecha_registro }}" required>
       </div>
 
       <button type="submit" class="btn-naranja w-100">GUARDAR CAMBIOS</button>
