@@ -74,9 +74,8 @@
   <h1>Editar auto</h1>
 
   <div class="form-container">
-    <form method="POST">
-      {% csrf_token %}
-
+    <p id="mensaje" role="status" aria-live="polite">Cargando vehículo...</p>
+    <form id="formEditar" hidden>
       <div class="mb-3">
         <div class="texto-actual">Marca actual: {{ auto.marca|capfirst }}</div>
         <label for="marca">Nueva Marca:</label>
@@ -104,11 +103,11 @@
       <div class="mb-3">
         <div class="texto-actual">Precio actual: {{ auto.precio }}</div>
         <label for="precio">Nuevo Precio:</label>
-        <input type="number" id="precio" name="precio" class="form-control" value="{{ auto.precio }}" min="0" step="1000" required>
+        <input type="number" id="precio" name="precio" class="form-control" value="{{ auto.precio }}" min="0" step="1" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Kilometraje actual: {{ auto.kilometros }}</div>
+        <div class="texto-actual">Kilometraje actual: {{ auto.kilometraje }}</div>
         <label for="kilometraje">Nuevo Kilometraje:</label>
         <input type="number" id="kilometraje" name="kilometraje" class="form-control" value="{{ auto.kilometraje }}" min="0" required>
       </div>
@@ -117,10 +116,10 @@
         <div class="texto-actual">Tipo de combustible actual: {{ auto.tipo_combustible|capfirst }}</div>
         <label for="tipo_combustible">Nuevo Tipo de Combustible:</label>
         <select id="tipo_combustible" name="tipo_combustible" class="form-select" required>
-            <option value="gasolina" {% if auto.tipo_combustible == "gasolina" %}selected{% endif %}>Gasolina</option>
-            <option value="diésel" {% if auto.tipo_combustible == "diésel" %}selected{% endif %}>Diésel</option>
-            <option value="eléctrico" {% if auto.tipo_combustible == "eléctrico" %}selected{% endif %}>Eléctrico</option>
-            <option value="híbrido" {% if auto.tipo_combustible == "híbrido" %}selected{% endif %}>Híbrido</option>
+          <option value="gasolina">Gasolina</option>
+          <option value="diesel">Diésel</option>
+          <option value="electrico">Eléctrico</option>
+          <option value="hibrido">Híbrido</option>
         </select>
       </div>
 
@@ -128,8 +127,8 @@
         <div class="texto-actual">Transmisión actual: {{ auto.transmision|capfirst }}</div>
         <label for="transmision">Nueva Transmisión:</label>
         <select id="transmision" name="transmision" class="form-select" required>
-            <option value="manual" {% if auto.transmision == "manual" %}selected{% endif %}>Manual</option>
-            <option value="automática" {% if auto.transmision == "automática" %}selected{% endif %}>Automática</option>
+          <option value="manual">Manual</option>
+          <option value="automatica">Automática</option>
         </select>
       </div>
 
@@ -142,7 +141,7 @@
       <div class="mb-3">
         <div class="texto-actual">Fecha de registro actual: {{ auto.fecha_registro }}</div>
         <label for="fecha_registro">Nueva Fecha de Registro:</label>
-        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" value="{{ auto.fecha_registro }}" required>
+        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" value="{{ auto.fecha_registro|date:'Y-m-d'  }}" readonly>
       </div>
 
       <button type="submit" class="btn-naranja w-100">GUARDAR CAMBIOS</button>
@@ -152,5 +151,154 @@
   <a href="/">← Volver al inicio</a>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const token = sessionStorage.getItem('token');
+
+    // Obtener el ID desde una dirección como /editar/3/
+    const partesURL = window.location.pathname
+        .split('/')
+        .filter(Boolean);
+
+    const autoId = partesURL[partesURL.length - 1];
+
+    const formulario = document.getElementById('formEditar');
+    const mensaje = document.getElementById('mensaje');
+    const btnGuardar = formulario.querySelector('button[type="submit"]');
+
+    const campos = [
+        'marca',
+        'modelo',
+        'año',
+        'color',
+        'precio',
+        'kilometraje',
+        'tipo_combustible',
+        'transmision',
+        'numero_puertas'
+    ];
+
+    // GET: consultar el vehículo y cargar sus datos en el formulario
+    async function cargarVehiculo() {
+        if (!token) {
+            window.location.href = '/';
+            return;
+        }
+
+        try {
+            const respuesta = await fetch(
+                `/api/vehiculos/${autoId}/`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${token}`
+                    }
+                }
+            );
+
+            if (respuesta.status === 401 ||
+                respuesta.status === 403) {
+                sessionStorage.removeItem('token');
+                window.location.href = '/';
+                return;
+            }
+
+            if (!respuesta.ok) {
+                throw new Error(
+                    `No se pudo cargar el vehículo. HTTP ${respuesta.status}`
+                );
+            }
+
+            const vehiculo = await respuesta.json();
+
+            // Colocar cada dato recibido en su campo
+            for (const campo of campos) {
+                document.getElementById(campo).value = vehiculo[campo];
+            }
+
+            document.getElementById('fecha_registro').value =
+                vehiculo.fecha_registro;
+
+            document.getElementById('año').max =
+                new Date().getFullYear();
+
+            formulario.hidden = false;
+            mensaje.textContent = `Editando vehículo #${vehiculo.id}`;
+
+        } catch (error) {
+            console.error(error);
+            mensaje.textContent = error.message;
+        }
+    }
+
+    // PUT: enviar todos los campos editables del vehículo
+    formulario.addEventListener('submit', async function(evento) {
+        evento.preventDefault();
+
+        const datos = {
+            marca: document.getElementById('marca').value.trim().toLowerCase(),
+            modelo: document.getElementById('modelo').value.trim().toLowerCase(),
+            año: Number(document.getElementById('año').value),
+            color: document.getElementById('color').value.trim().toLowerCase(),
+            precio: document.getElementById('precio').value,
+            kilometraje: Number(
+                document.getElementById('kilometraje').value
+            ),
+            tipo_combustible: document.getElementById('tipo_combustible').value,
+            transmision: document.getElementById('transmision').value,
+            numero_puertas: Number(
+                document.getElementById('numero_puertas').value
+            )
+        };
+
+        if (!datos.marca || !datos.modelo || !datos.color) {
+            mensaje.textContent =
+                'La marca, el modelo y el color son obligatorios.';
+            return;
+        }
+
+        btnGuardar.disabled = true;
+        mensaje.textContent = 'Guardando cambios...';
+
+        try {
+            const respuesta = await fetch(
+                `/api/vehiculos/${autoId}/`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Token ${token}`
+                    },
+                    body: JSON.stringify(datos)
+                }
+            );
+
+            if (respuesta.status === 401 ||
+                respuesta.status === 403) {
+                sessionStorage.removeItem('token');
+                window.location.href = '/';
+                return;
+            }
+
+            if (!respuesta.ok) {
+                const error = await respuesta.json().catch(() => ({}));
+
+                throw new Error(
+                    error.error ||
+                    `No se pudo actualizar el vehículo. HTTP ${respuesta.status}`
+                );
+            }
+
+            mensaje.textContent = 'Vehículo actualizado correctamente.';
+            window.location.href = '/catalogo/';
+
+        } catch (error) {
+            console.error(error);
+            mensaje.textContent = error.message;
+            btnGuardar.disabled = false;
+        }
+    });
+
+    cargarVehiculo();
+</script>
 </body>
 </html>
