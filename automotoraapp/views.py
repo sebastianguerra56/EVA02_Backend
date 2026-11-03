@@ -175,3 +175,10 @@ class VehiculoDetalleAPIView(APIView):
             'fecha_registro': vehiculo.fecha_registro
         }
         return Response(datos, status=status.HTTP_200_OK)
+        # DELETE: eliminar un vehículo por su ID
+    def delete(self, request, auto_id):
+        vehiculo = get_object_or_404(Vehiculo, id=auto_id)
+
+        vehiculo.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
