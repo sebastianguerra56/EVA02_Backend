@@ -75,6 +75,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <h1>Eliminar auto</h1>
@@ -95,14 +96,71 @@
         <p><strong>Fecha de registro:</strong> {{ auto.fecha_registro }}</p>
     </div>
 
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit" class="btn-rojo w-100">SÍ, ELIMINAR AUTO</button>
-    </form>
+    <button type="button" id="btnEliminar" class="btn-rojo w-100">SÍ, ELIMINAR AUTO</button>
+    <p id="mensaje"></p>
   </div>
 
   <a href="/">← Cancelar y volver al inicio</a>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const token = sessionStorage.getItem('token');
+    const autoId = {{ auto.id }};
+    const btnEliminar = document.getElementById('btnEliminar');
+    const mensaje = document.getElementById('mensaje');
+
+    btnEliminar.addEventListener('click', async function() {
+        if (!token) {
+            window.location.href = '/';
+            return;
+        }
+
+        const confirmar = confirm(
+            '¿Realmente deseas eliminar este vehículo?'
+        );
+
+        if (!confirmar) {
+            return;
+        }
+
+        btnEliminar.disabled = true;
+        mensaje.textContent = 'Eliminando vehículo...';
+
+        try {
+            const respuesta = await fetch(
+                `/api/vehiculos/${autoId}/`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Token ${token}`
+                    }
+                }
+            );
+
+            if (respuesta.status === 401 ||
+                respuesta.status === 403) {
+                sessionStorage.removeItem('token');
+                window.location.href = '/';
+                return;
+            }
+
+            if (!respuesta.ok) {
+                throw new Error(
+                    `No se pudo eliminar el vehículo. HTTP ${respuesta.status}`
+                );
+            }
+
+            // DELETE puede responder con HTTP 204 sin contenido.
+            mensaje.textContent = 'Vehículo eliminado correctamente.';
+
+            window.location.href = '/catalogo/';
+
+        } catch (error) {
+            console.error(error);
+            mensaje.textContent = error.message;
+            btnEliminar.disabled = false;
+        }
+    });
+</script>
 </body>
 </html>
