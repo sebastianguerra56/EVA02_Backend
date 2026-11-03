@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
+from datetime import date
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -16,22 +17,7 @@ def inicio(request):
     return render(request, 'automotoraapp/inicio.html')
 
 def crear_auto(request):
-    if request.method == 'POST':
-        marca = request.POST.get('marca')
-        modelo = request.POST.get('modelo')
-        año = request.POST.get('año')
-        color = request.POST.get('color')
-        precio = request.POST.get('precio')
-        kilometraje = request.POST.get('kilometraje')
-        tipo_combustible = request.POST.get('tipo_combustible')
-        transmision = request.POST.get('transmision')
-        numero_puertas = request.POST.get('numero_puertas')
-        fecha_registro = request.POST.get('fecha_registro')
-
-        auto = Vehiculo(marca=marca.lower(), modelo=modelo.lower(), año=año, color=color.lower(), precio=precio, kilometraje=kilometraje, tipo_combustible=tipo_combustible, transmision=transmision, numero_puertas=numero_puertas, fecha_registro=fecha_registro)
-        auto.save()
-        return render(request, 'automotoraapp/confirmacion.html', {'auto': auto})
-    return render(request, 'automotoraapp/crear.html')
+    return render(request, 'automotoraapp/crear.html',{'año_actual': date.today().year, 'fecha_actual': date.today().isoformat()})
 
 def catalogo(request):
     return render(request, 'automotoraapp/catalogo.html')
@@ -118,3 +104,55 @@ class AutomotoraAPIView(APIView):
                 'fecha_registro': vehiculo.fecha_registro
             })   
         return Response(datos, status=status.HTTP_200_OK)
+    
+    #Post Registrar un nuevo vehículo
+    def post(self, request):
+
+        #Recibir datos del cliente
+        marca = request.data.get('marca')
+        modelo = request.data.get('modelo')
+        año = request.data.get('año')
+        color = request.data.get('color')
+        precio = request.data.get('precio')
+        kilometraje = request.data.get('kilometraje')
+        tipo_combustible = request.data.get('tipo_combustible')
+        transmision = request.data.get('transmision')
+        numero_puertas = request.data.get('numero_puertas')
+        fecha_registro = request.data.get('fecha_registro')
+
+        if marca is None or modelo is None or año is None or color is None or precio is None or kilometraje is None or tipo_combustible is None or transmision is None or numero_puertas is None or fecha_registro is None:
+            return Response({
+                'error': 'Debe proporcionar todos los datos para el vehículo'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        #Registramos el vehículo en la base de datos
+        vehiculo = Vehiculo.objects.create(
+            marca=marca.lower(),
+            modelo=modelo.lower(),
+            año=año,
+            color=color.lower(),
+            precio=precio,
+            kilometraje=kilometraje,
+            tipo_combustible=tipo_combustible.lower(),
+            transmision=transmision.lower(),
+            numero_puertas=numero_puertas,
+            fecha_registro=fecha_registro
+        )
+        return Response({
+            'mensaje': 'Vehículo creado correctamente',
+            'vehiculo': {
+                'id': vehiculo.id,
+                'marca': vehiculo.marca,
+                'modelo': vehiculo.modelo,
+                'año': vehiculo.año,
+                'color': vehiculo.color,
+                'precio': str(vehiculo.precio),
+                'kilometraje': vehiculo.kilometraje,
+                'tipo_combustible': vehiculo.tipo_combustible,
+                'transmision': vehiculo.transmision,
+                'numero_puertas': vehiculo.numero_puertas,
+                'fecha_registro': vehiculo.fecha_registro
+            }
+        }, status=status.HTTP_201_CREATED)
+
+ 
