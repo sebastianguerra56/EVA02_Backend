@@ -23,8 +23,7 @@ def catalogo(request):
     return render(request, 'automotoraapp/catalogo.html')
 
 def ver_auto(request, auto_id):
-    auto = Vehiculo.objects.get(id=auto_id)
-    return render(request, 'automotoraapp/ver.html', {'auto': auto})
+    return render(request, 'automotoraapp/ver.html')
 
 
 def editar_auto(request, auto_id):
@@ -155,4 +154,24 @@ class AutomotoraAPIView(APIView):
             }
         }, status=status.HTTP_201_CREATED)
 
- 
+class VehiculoDetalleAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    #Get obtener un vehículo por su ID
+    def get(self, request, auto_id):
+        vehiculo = get_object_or_404(Vehiculo, id=auto_id)
+        datos = {
+            'id': vehiculo.id,
+            'marca': vehiculo.marca,
+            'modelo': vehiculo.modelo,
+            'año': vehiculo.año,
+            'color': vehiculo.color,
+            'precio': str(vehiculo.precio),
+            'kilometraje': vehiculo.kilometraje,
+            'tipo_combustible': vehiculo.tipo_combustible,
+            'transmision': vehiculo.transmision,
+            'numero_puertas': vehiculo.numero_puertas,
+            'fecha_registro': vehiculo.fecha_registro
+        }
+        return Response(datos, status=status.HTTP_200_OK)

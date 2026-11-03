@@ -16,4 +16,6 @@ urlpatterns = [
 
     #API Listar Vehículos
     path('api/vehiculos/', views.AutomotoraAPIView.as_view(), name='api_vehiculos'),
+    #API Detalle Vehículo
+    path('api/vehiculos/<int:auto_id>/', views.VehiculoDetalleAPIView.as_view(), name='api_vehiculo_detalle'),
 ]

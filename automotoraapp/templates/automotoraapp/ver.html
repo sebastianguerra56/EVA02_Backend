@@ -1,89 +1,340 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalles del Auto</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: linear-gradient(135deg, #000 0%, #222 100%); /* fondo metálico */
-      color: #fff;
-    }
-    h1 {
-      text-align: center;
-      margin: 30px 0;
-      font-family: 'Orbitron', sans-serif;
-      color: #ff6600; /* naranja deportivo */
-      text-transform: uppercase;
-      text-shadow: 0 3px 8px rgba(0,0,0,0.8);
-    }
-    .contenedor {
-      max-width: 700px;
-      margin: auto;
-      background: rgba(0,0,0,0.7);
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(255, 102, 0, 0.4);
-      text-align: center;
-    }
-    .informacion p {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-      color: #f0f0f0;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    }
-    .informacion strong {
-      color: #ff6600;
-    }
-    .auto-img {
-      max-height: 300px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
-    }
-    .boton {
-      display: inline-block;
-      margin: 10px;
-      background: linear-gradient(45deg, #ff6600, #ff3300);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: transform 0.2s ease;
-    }
-    .boton:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Detalle del vehículo</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Orbitron -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background:linear-gradient(135deg,#000 0%,#222 100%);
+            color: #fff;
+        }
+
+        /* CONTENEDOR */
+        .contenedor {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 30px;
+            background:rgba(0, 0, 0, 0.75);
+            border: 1px solid #333;
+            border-radius: 12px;
+            box-shadow:0 8px 20px rgba(255, 102, 0, 0.4);
+        }
+
+        /* TÍTULO */
+        h1 {
+            margin-bottom: 25px;
+            text-align: center;
+            font-family:'Orbitron',sans-serif;
+            color: #ff6600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow:0 3px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        /* IMAGEN */
+        .contenedor-imagen {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .auto-img {
+            width: 100%;
+            max-width: 550px;
+            max-height: 320px;
+            object-fit: contain;
+            filter:drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+        }
+
+        /* CAMPOS */
+        .campo {
+            margin: 12px 0;
+            padding: 15px;
+            background:rgba(30, 30, 30, 0.9);
+            border-left:4px solid #ff6600;
+            border-radius: 6px;
+            text-align: left;
+        }
+
+        .etiqueta {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff6600;
+            font-weight: bold;
+        }
+
+        .valor {
+            color: #f0f0f0;
+            overflow-wrap: anywhere;
+        }
+
+        /* BOTONES */
+        .botones {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            transition:transform 0.2s ease,box-shadow 0.2s ease;
+        }
+
+        .boton:hover {
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow:0 4px 12px rgba(0, 0, 0, 0.8);
+        }
+
+        .volver {
+            background:
+                linear-gradient(
+                    45deg,
+                    #ff6600,
+                    #ff3300
+                );
+        }
+
+        .editar {
+            background-color: transparent;
+            border:
+                1px solid #f8f9fa;
+        }
+
+        .editar:hover {
+            background-color: #f8f9fa;
+            color: #111;
+        }
+
+        .eliminar {
+          background-color: transparent;
+          color: #dc3545;
+          border: 1px solid #dc3545;
+        }
+
+        .eliminar:hover {
+            background-color: #dc3545;
+            color: white;
+            transform: scale(1.05);
+            box-shadow:0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        /* MENSAJE */
+
+        #mensaje {
+            text-align: center;
+
+            color: #ccc;
+
+            margin: 20px 0;
+        }
+
+
+        #mensaje.error {
+            color: #ff7777;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 576px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .contenedor {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
 </head>
+
+
 <body>
-  <div class="contenedor">
-    <h1>{{auto.marca}} {{auto.modelo}}</h1>
 
-    <!-- Imagen dinámica del auto -->
-    <img src="{% static 'automotoraapp/img/' %}{{ auto.marca|lower|slugify }}-{{ auto.modelo|lower|slugify }}.png"
-         alt="{{ auto.marca }} {{ auto.modelo }}"
-         class="img-fluid auto-img">
+    <main class="contenedor">
 
-    <div class="informacion">
-      <p><strong>Marca:</strong> {{ auto.marca|capfirst }}</p>
-      <p><strong>Modelo:</strong> {{ auto.modelo|capfirst }}</p>
-      <p><strong>Año:</strong> {{ auto.año }}</p>
-      <p><strong>Color:</strong> {{ auto.color|capfirst }}</p>
-      <p><strong>Precio:</strong> ${{ auto.precio }}</p>
-      <p><strong>Kilometraje:</strong> {{ auto.kilometraje }}</p>
-      <p><strong>Tipo de Combustible:</strong> {{ auto.tipo_combustible|capfirst }}</p>
-      <p><strong>Transmisión:</strong> {{ auto.transmision|capfirst }}</p>
-      <p><strong>Número de Puertas:</strong> {{ auto.numero_puertas }}</p>
-    </div>
+        <p id="mensaje">
+            Cargando información del vehículo...
+        </p>
 
-    <!-- Botones de navegación -->
-    <a href="{% url 'catalogo' %}" class="boton">Volver al catálogo</a>
-    <a href="{% url 'inicio' %}" class="boton">Volver al inicio</a>
-  </div>
+        <section id="datosVehiculo" hidden>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            <h1 id="tituloVehiculo"></h1>
+
+            <div class="contenedor-imagen">
+                <img id="imagenVehiculo" class="auto-img" alt="Imagen del vehículo">
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Marca:</span>
+                <span id="marca" class="valor"></span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Modelo:</span>
+                <span id="modelo" class="valor"></span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Año:</span>
+                <span id="año" class="valor"></span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Color:</span>
+                <span id="color" class="valor"></span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Precio:</span>
+                <span class="valor">$<span id="precio"></span></span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Kilometraje:</span>
+                <span class="valor">
+                <span id="kilometraje"></span>km</span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Tipo de combustible:</span>
+                <span id="tipo_combustible" class="valor"></span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Transmisión:</span>
+                <span id="transmision" class="valor"></span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Número de puertas:</span>
+                <span id="numero_puertas" class="valor"></span>
+            </div>
+
+            <div class="campo">
+                <span class="etiqueta">Fecha de registro:</span>
+                <span id="fecha_registro" class="valor"></span>
+            </div>
+
+            <div class="botones">
+                <a href="{% url 'catalogo' %}" class="boton volver">Volver al catálogo</a>
+                <a id="enlaceEditar" class="boton editar">Editar vehículo</a>
+                <a id="enlaceEliminar" class="boton eliminar">Eliminar vehículo</a>
+            </div>
+            </div>
+        </section>
+    </main>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <script>
+
+        const token = sessionStorage.getItem('token');
+        const partesURL = window.location.pathname.split('/').filter(Boolean);
+        const autoId = partesURL[partesURL.length - 1];
+        const mensaje = document.getElementById('mensaje');
+        const datosVehiculo = document.getElementById('datosVehiculo');
+
+        async function cargarDetalle() {
+            if (!token) {
+                window.location.href = '/';
+                return;
+            }
+            try {
+              const respuesta =await fetch(`/api/vehiculos/${autoId}/`,
+              {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Token ${token}`
+                }
+              }
+              );
+              if (respuesta.status === 401 || respuesta.status === 403 ) 
+              {
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('usuario');
+                window.location.href = '/';
+                return;
+              }
+              if (!respuesta.ok) 
+              {
+                throw new Error(`No se pudo consultar el vehículo. HTTP ${respuesta.status}`);
+              }
+
+              const vehiculo = await respuesta.json();
+              document.getElementById('tituloVehiculo').textContent = `${capitalizar(vehiculo.marca)} ${capitalizar(vehiculo.modelo)}`;
+              document.getElementById('marca').textContent = capitalizar(vehiculo.marca);
+              document.getElementById('modelo').textContent =capitalizar(vehiculo.modelo);
+              document.getElementById('año').textContent = vehiculo.año;
+              document.getElementById('color').textContent = capitalizar(vehiculo.color);
+              document.getElementById('precio').textContent = vehiculo.precio;
+              document.getElementById('kilometraje').textContent = vehiculo.kilometraje;
+              document.getElementById('tipo_combustible').textContent = capitalizar(vehiculo.tipo_combustible);
+              document.getElementById('transmision').textContent = capitalizar(vehiculo.transmision);
+              document.getElementById('numero_puertas').textContent = vehiculo.numero_puertas;
+              document.getElementById('fecha_registro').textContent = vehiculo.fecha_registro;
+              const imagen = document.getElementById('imagenVehiculo');
+              imagen.src =`/static/automotoraapp/img/${vehiculo.marca.toLowerCase()}-${vehiculo.modelo.toLowerCase()}.png`;
+              imagen.alt = `${vehiculo.marca} ${vehiculo.modelo}`;
+              document.getElementById('enlaceEditar').href = `/editar/${vehiculo.id}/`;
+              document.getElementById('enlaceEliminar').href = `/eliminar/${vehiculo.id}/`;
+              datosVehiculo.hidden = false;
+              mensaje.textContent = '';
+            } catch (error) {
+                console.error(error);
+                mensaje.textContent = error.message;
+                mensaje.className ='error';
+            }
+        }
+        function capitalizar(texto) {
+            if (!texto) {
+                return '';
+            }
+            return (
+                texto.charAt(0).toUpperCase() + texto.slice(1)
+            );
+        }
+        cargarDetalle();
+
+    </script>
+
 </body>
+
 </html>
