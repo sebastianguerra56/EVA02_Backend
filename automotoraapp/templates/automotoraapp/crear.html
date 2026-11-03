@@ -4,42 +4,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Registrar Auto</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
   <style>
     body {
-      background: linear-gradient(135deg, #000 0%, #222 100%); /* fondo metálico */
+      min-height: 100vh;
+      background: linear-gradient(135deg, #000 0%, #222 100%);
       color: #fff;
     }
+
     h1 {
       text-align: center;
       margin: 30px 0;
       font-family: 'Orbitron', sans-serif;
-      color: #ff6600; /* naranja deportivo */
+      color: #ff6600;
       text-transform: uppercase;
       text-shadow: 0 3px 8px rgba(0,0,0,0.8);
     }
+
     .form-container {
       background: rgba(0,0,0,0.7);
       padding: 30px;
       border-radius: 10px;
       max-width: 600px;
       margin: auto;
-      box-shadow: 0 8px 20px rgba(255, 102, 0, 0.4);
+      box-shadow: 0 8px 20px rgba(255,102,0,0.4);
     }
+
     label {
       font-weight: bold;
       color: #ff6600;
     }
-    input, select {
-      background-color: #111;
-      color: #fff;
-      border: 1px solid #444;
+
+    input,
+    select {
+      background-color: #111 !important;
+      color: #fff !important;
+      border: 1px solid #444 !important;
     }
-    input:focus, select:focus {
-      border-color: #ff6600;
-      box-shadow: 0 0 8px rgba(255, 102, 0, 0.6);
+
+    input:focus,
+    select:focus {
+      background-color: #111 !important;
+      color: #fff !important;
+      border-color: #ff6600 !important;
+      box-shadow: 0 0 8px rgba(255,102,0,0.6) !important;
     }
+
     .btn-naranja {
       background: linear-gradient(45deg, #ff6600, #ff3300);
       color: #fff;
@@ -48,29 +65,58 @@
       padding: 10px 25px;
       transition: transform 0.2s ease;
     }
+
     .btn-naranja:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+      color: #fff;
+      transform: scale(1.03);
+      box-shadow: 0 4px 12px rgba(255,102,0,0.5);
     }
-    a {
+
+    .volver {
       display: block;
       text-align: center;
-      margin-top: 20px;
+      margin: 20px 0 30px;
       color: #ff6600;
       text-decoration: none;
     }
-    a:hover {
+
+    .volver:hover {
+      color: #ff8533;
       text-decoration: underline;
+    }
+
+    #mensaje {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    #mensaje:empty {
+      display: none;
+    }
+
+    #mensaje.exito {
+      color: #7cff9d;
+      background: rgba(0,170,70,0.15);
+      border: 1px solid #238c44;
+    }
+
+    #mensaje.error {
+      color: #ff7777;
+      background: rgba(200,0,0,0.15);
+      border: 1px solid #8c2323;
     }
   </style>
 </head>
+
 <body>
 
   <h1>Registrar nuevo auto</h1>
 
   <div class="form-container">
-    <form method="POST">
-      {% csrf_token %}
+
+    <form id="formVehiculo">
 
       <div class="mb-3">
         <label for="marca">Marca:</label>
@@ -84,7 +130,7 @@
 
       <div class="mb-3">
         <label for="año">Año:</label>
-        <input type="number" id="año" name="año" class="form-control" min="1900" max="{{ today }}" required>
+        <input type="number" id="año" name="año" class="form-control" min="2000" max="{{ año_actual }}" required>
       </div>
 
       <div class="mb-3">
@@ -103,39 +149,135 @@
       </div>
 
       <div class="mb-3">
-        <label for="tipo_combustible">Tipo de Combustible:</label>
+        <label for="tipo_combustible">
+          Tipo de Combustible:
+        </label>
         <select id="tipo_combustible" name="tipo_combustible" class="form-select" required>
-          <option value="gasolina">Gasolina</option>
-          <option value="diesel">Diesel</option>
-          <option value="electrico">Eléctrico</option>
-          <option value="hibrido">Híbrido</option>
+
+          <option value="gasolina">
+            Gasolina ⛽
+          </option>
+
+          <option value="diesel">
+            Diesel 🛢️
+          </option>
+
+          <option value="electrico">
+            Eléctrico ⚡
+          </option>
+
+          <option value="hibrido">
+            Híbrido 🚗
+          </option>
+
         </select>
       </div>
 
+
       <div class="mb-3">
-        <label for="transmision">Transmisión:</label>
+        <label for="transmision">
+          Transmisión:
+        </label>
         <select id="transmision" name="transmision" class="form-select" required>
-          <option value="manual">Manual</option>
-          <option value="automatica">Automática</option>
+
+          <option value="manual">
+            Manual 
+          </option>
+
+          <option value="automatica">
+            Automática
+          </option>
+
         </select>
       </div>
 
       <div class="mb-3">
-        <label for="numero_puertas">Número de Puertas:</label>
+        <label for="numero_puertas">
+          Número de Puertas:
+        </label>
         <input type="number" id="numero_puertas" name="numero_puertas" class="form-control" min="2" max="5" required>
       </div>
 
       <div class="mb-3">
-        <label for="fecha_registro">Fecha de Registro:</label>
-        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" required>
+        <label for="fecha_registro">
+          Fecha de Registro:
+        </label>
+        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" max="{{ fecha_actual }}" required>
       </div>
 
       <button type="submit" class="btn-naranja w-100">REGISTRAR</button>
+
     </form>
+    <!-- Mensajes API -->
+    <p id="mensaje" role="status" aria-live="polite"></p>
+
   </div>
 
-  <a href="{% url 'inicio' %}">Volver al inicio</a>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  <a
+    href="{% url 'inicio' %}"
+    class="volver"
+  >
+    ← Volver al inicio
+  </a>
+
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+  </script>
+  <script>
+    const formulario = document.getElementById('formVehiculo');
+    const mensaje = document.getElementById('mensaje');
+
+    formulario.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      // Recuperar el token guardado durante el login
+      const token = sessionStorage.getItem('token');
+
+      // Comprobar si existe un token
+      if (!token) {
+        mensaje.textContent = 'Debes iniciar sesión para registrar un vehículo.';
+        return;
+      }
+
+      // Crear objeto con los datos del formulario
+      const vehiculo = {
+        marca: document.getElementById('marca').value,
+        modelo: document.getElementById('modelo').value,
+        año: document.getElementById('año').value,
+        color: document.getElementById('color').value,
+        precio: document.getElementById('precio').value,
+        kilometraje: document.getElementById('kilometraje').value,
+        tipo_combustible: document.getElementById('tipo_combustible').value,
+        transmision: document.getElementById('transmision').value,
+        numero_puertas: document.getElementById('numero_puertas').value,
+        fecha_registro: document.getElementById('fecha_registro').value
+      };
+
+      try {
+        const respuesta = await fetch('/api/vehiculos/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
+          },
+          body: JSON.stringify(vehiculo)
+        });
+
+        const datos = await respuesta.json();
+
+        if (respuesta.ok) {
+          mensaje.textContent = 'Vehículo registrado exitosamente.';
+          window.location.href = '/catalogo/';
+        } else if (respuesta.status === 401 || respuesta.status === 403) {
+          mensaje.textContent = 'Sesion no válida. Por favor, inicia sesión nuevamente.';
+        }else {
+          mensaje.textContent = `Error al registrar el vehículo: ${datos.error || 'Error desconocido'}`;
+        }
+      } catch (error) {
+        mensaje.textContent = `Error conexion con el servidor`;
+        console.error(error);
+      }
+    });
+  </script>
