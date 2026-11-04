@@ -41,27 +41,198 @@
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0,0,0,0.8);
     }
+    .capitalizar {
+        text-transform: capitalize;
+    }
+
+    .contenedor-imagen {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .auto-img {
+        width: 100%;
+        max-width: 450px;
+        max-height: 280px;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+    }
   </style>
 </head>
 <body>
-  <h1>✅ Auto registrado con éxito</h1>
+  <h1>✅ Vehículo actualizado con éxito</h1>
 
-  <div class="detalle">
-    <p><strong>Marca:</strong> {{ auto.marca|capfirst }}</p>
-    <p><strong>Modelo:</strong> {{ auto.modelo|capfirst }}</p>
-    <p><strong>Año:</strong> {{ auto.año }}</p>
-    <p><strong>Color:</strong> {{ auto.color|capfirst }}</p>
-    <p><strong>Precio:</strong> ${{ auto.precio }}</p>
-    <p><strong>Kilometraje:</strong> {{ auto.kilometraje }}</p>
-    <p><strong>Combustible:</strong> {{ auto.tipo_combustible|capfirst }}</p>
-    <p><strong>Transmisión:</strong> {{ auto.transmision|capfirst }}</p>
-    <p><strong>Puertas:</strong> {{ auto.numero_puertas }}</p>
-    <p><strong>Fecha de registro:</strong> {{ auto.fecha_registro }}</p>
+  <p id="mensaje">Cargando información...</p>
+
+  <div id="detalle" class="detalle" hidden>
+
+      <div class="contenedor-imagen">
+          <img
+              id="imagenVehiculo"
+              class="auto-img"
+              alt="Imagen del vehículo"
+          >
+      </div>
+
+      <p>
+          <strong>Marca:</strong>
+          <span id="marca" class="capitalizar"></span>
+      </p>
+
+      <p>
+          <strong>Modelo:</strong>
+          <span id="modelo" class="capitalizar"></span>
+      </p>
+
+      <p>
+          <strong>Año:</strong>
+          <span id="año"></span>
+      </p>
+
+      <p>
+          <strong>Color:</strong>
+          <span id="color" class="capitalizar"></span>
+      </p>
+
+      <p>
+          <strong>Precio:</strong>
+          $<span id="precio"></span>
+      </p>
+
+      <p>
+          <strong>Kilometraje:</strong>
+          <span id="kilometraje"></span> km
+      </p>
+
+      <p>
+          <strong>Combustible:</strong>
+          <span id="tipo_combustible" class="capitalizar"></span>
+      </p>
+
+      <p>
+          <strong>Transmisión:</strong>
+          <span id="transmision" class="capitalizar"></span>
+      </p>
+
+      <p>
+          <strong>Puertas:</strong>
+          <span id="numero_puertas"></span>
+      </p>
+
+      <p>
+          <strong>Fecha de registro:</strong>
+          <span id="fecha_registro"></span>
+      </p>
+
   </div>
+
 
   <div>
     <a href="{% url 'catalogo' %}" class="boton">Volver al catálogo</a>
     <a href="{% url 'inicio' %}" class="boton">Volver al inicio</a>
   </div>
+<script>
+    const token = sessionStorage.getItem('token');
+    const autoId = '{{ auto_id }}';
+
+    const mensaje = document.getElementById('mensaje');
+    const detalle = document.getElementById('detalle');
+
+    async function cargarVehiculo() {
+
+        if (!token) {
+            window.location.href = '/';
+            return;
+        }
+
+        try {
+
+            const respuesta = await fetch(
+                `/api/vehiculos/${autoId}/`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${token}`
+                    }
+                }
+            );
+
+            if (
+                respuesta.status === 401 ||
+                respuesta.status === 403
+            ) {
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('usuario');
+                window.location.href = '/';
+                return;
+            }
+
+            if (!respuesta.ok) {
+                throw new Error(
+                    `No se pudo consultar el vehículo. HTTP ${respuesta.status}`
+                );
+            }
+
+            const vehiculo = await respuesta.json();
+
+            document.getElementById('marca').textContent =
+                vehiculo.marca;
+
+            document.getElementById('modelo').textContent =
+                vehiculo.modelo;
+
+            document.getElementById('año').textContent =
+                vehiculo.año;
+
+            document.getElementById('color').textContent =
+                vehiculo.color;
+
+            document.getElementById('precio').textContent =
+                vehiculo.precio;
+
+            document.getElementById('kilometraje').textContent =
+                vehiculo.kilometraje;
+
+            document.getElementById('tipo_combustible').textContent =
+                vehiculo.tipo_combustible;
+
+            document.getElementById('transmision').textContent =
+                vehiculo.transmision;
+
+            document.getElementById('numero_puertas').textContent =
+                vehiculo.numero_puertas;
+
+            document.getElementById('fecha_registro').textContent =
+                vehiculo.fecha_registro;
+
+
+            // Imagen
+
+            const rutaImagenes =
+                "{% static 'automotoraapp/img/' %}";
+
+            const imagen =
+                document.getElementById('imagenVehiculo');
+
+            imagen.src =
+                `${rutaImagenes}${vehiculo.marca.toLowerCase()}-${vehiculo.modelo.toLowerCase()}.png`;
+
+            imagen.alt =
+                `${vehiculo.marca} ${vehiculo.modelo}`;
+
+
+            mensaje.textContent = '';
+            detalle.hidden = false;
+
+        } catch (error) {
+
+            console.error(error);
+            mensaje.textContent = error.message;
+
+        }
+    }
+
+    cargarVehiculo();
+</script>
 </body>
 </html>

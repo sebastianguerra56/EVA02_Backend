@@ -73,41 +73,166 @@
       color: #fff;
       text-decoration: underline;
     }
+    .capitalizar {
+        text-transform: capitalize;
+    }
+
+    .contenedor-imagen {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .auto-img {
+        width: 100%;
+        max-width: 450px;
+        max-height: 280px;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+    }
   </style>
 </head>
 
 <body>
 
-  <h1>Eliminar auto</h1>
+  <h1>Eliminar vehículo</h1>
 
   <div class="form-container">
-    <p class="advertencia">¿Estás seguro de que quieres eliminar este auto?</p>
+    <p id = "mensajeCarga" class="advertencia">Cargando información del vehículo...</p>
 
-    <div class="detalle-auto">
-        <p><strong>Marca:</strong> {{ auto.marca|capfirst }}</p>
-        <p><strong>Modelo:</strong> {{ auto.modelo|capfirst }}</p>
-        <p><strong>Color:</strong> {{ auto.color|capfirst }}</p>
-        <p><strong>Precio:</strong> ${{ auto.precio }}</p>
-        <p><strong>Año:</strong> {{ auto.año }}</p>
-        <p><strong>Kilómetros:</strong> {{ auto.kilometros }}</p>
-        <p><strong>Tipo de combustible:</strong> {{ auto.tipo_combustible|capfirst }}</p>
-        <p><strong>Transmisión:</strong> {{ auto.transmision|capfirst }}</p>
-        <p><strong>Número de puertas:</strong> {{ auto.numero_puertas }}</p>
-        <p><strong>Fecha de registro:</strong> {{ auto.fecha_registro }}</p>
+    <div id="contenidoVehiculo" hidden>
+      <p class="advertencia">⚠️ Esta acción es irreversible. ¿Estás seguro de que deseas eliminar este vehículo?</p>
+      <div class = "contenedor-imagen">
+          <img
+              id="imagenVehiculo"
+              class="auto-img"
+              alt="Imagen del vehículo"
+          >
+      </div>
+      <div class="detalle-auto">
+          <p><strong>Marca:</strong> <span id="marca" class="capitalizar"></span></p>
+          <p><strong>Modelo:</strong> <span id="modelo" class="capitalizar"></span></p>
+          <p><strong>Color:</strong> <span id="color" class="capitalizar"></span></p>
+          <p><strong>Precio:</strong> $<span id="precio"></span></p>
+          <p><strong>Año:</strong> <span id="año"></span></p>
+          <p><strong>Kilómetros:</strong> <span id="kilometraje"></span> km</p>
+          <p><strong>Tipo de combustible:</strong> <span id="tipo_combustible" class="capitalizar"></span></p>
+          <p><strong>Transmisión:</strong> <span id="transmision" class="capitalizar"></span></p>
+          <p><strong>Número de puertas:</strong> <span id="numero_puertas"></span></p>
+          <p><strong>Fecha de registro:</strong> <span id="fecha_registro"></span></p>
+      </div>
+  
+      <button type="button" id="btnEliminar" class="btn-rojo w-100">SÍ, ELIMINAR VEHÍCULO</button>
+      <p id="mensaje"></p>
+    </div>
     </div>
 
-    <button type="button" id="btnEliminar" class="btn-rojo w-100">SÍ, ELIMINAR AUTO</button>
-    <p id="mensaje"></p>
-  </div>
-
-  <a href="{% url 'catalogo' %}">← Cancelar y volver al inicio</a>
+  <a href="{% url 'catalogo' %}">← Cancelar y volver al catálogo</a>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const token = sessionStorage.getItem('token');
-    const autoId = {{ auto.id }};
+    const autoId = '{{ auto_id }}';
     const btnEliminar = document.getElementById('btnEliminar');
     const mensaje = document.getElementById('mensaje');
+    const contenidoVehiculo = document.getElementById('contenidoVehiculo');
+    const mensajeCarga = document.getElementById('mensajeCarga');
+
+    async function cargarVehiculo() {
+
+        if (!token) {
+            window.location.href = '/';
+            return;
+        }
+
+        try {
+
+            const respuesta = await fetch(
+                `/api/vehiculos/${autoId}/`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${token}`
+                    }
+                }
+            );
+
+            if (
+                respuesta.status === 401 ||
+                respuesta.status === 403
+            ) {
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('usuario');
+                window.location.href = '/';
+                return;
+            }
+
+            if (!respuesta.ok) {
+                throw new Error(
+                    `No se pudo cargar el vehículo. HTTP ${respuesta.status}`
+                );
+            }
+
+            const vehiculo = await respuesta.json();
+
+            document.getElementById('marca').textContent =
+                vehiculo.marca;
+
+            document.getElementById('modelo').textContent =
+                vehiculo.modelo;
+
+            document.getElementById('color').textContent =
+                vehiculo.color;
+
+            document.getElementById('precio').textContent =
+                vehiculo.precio;
+
+            document.getElementById('año').textContent =
+                vehiculo.año;
+
+            document.getElementById('kilometraje').textContent =
+                vehiculo.kilometraje;
+
+            document.getElementById('tipo_combustible').textContent =
+                vehiculo.tipo_combustible;
+
+            document.getElementById('transmision').textContent =
+                vehiculo.transmision;
+
+            document.getElementById('numero_puertas').textContent =
+                vehiculo.numero_puertas;
+
+            document.getElementById('fecha_registro').textContent =
+                vehiculo.fecha_registro;
+
+
+            // Imagen
+            const rutaImagenes =
+                "{% static 'automotoraapp/img/' %}";
+
+            const imagen =
+                document.getElementById('imagenVehiculo');
+
+            imagen.src =
+                `${rutaImagenes}${vehiculo.marca.toLowerCase()}-${vehiculo.modelo.toLowerCase()}.png`;
+
+            imagen.alt =
+                `${vehiculo.marca} ${vehiculo.modelo}`;
+
+
+            mensajeCarga.textContent =
+                `Vas a eliminar ${vehiculo.marca} ${vehiculo.modelo}`;
+
+            mensajeCarga.classList.add('capitalizar');
+
+            contenidoVehiculo.hidden = false;
+
+        } catch (error) {
+
+            console.error(error);
+            mensajeCarga.textContent = error.message;
+
+        }
+    }
 
     btnEliminar.addEventListener('click', async function() {
         if (!token) {
@@ -140,6 +265,7 @@
             if (respuesta.status === 401 ||
                 respuesta.status === 403) {
                 sessionStorage.removeItem('token');
+                sessionStorage.removeItem('usuario');
                 window.location.href = '/';
                 return;
             }
@@ -161,6 +287,7 @@
             btnEliminar.disabled = false;
         }
     });
+    cargarVehiculo();
 </script>
 </body>
 </html>

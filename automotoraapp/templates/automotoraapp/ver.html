@@ -256,7 +256,6 @@
                 <a id="enlaceEditar" class="boton editar">Editar vehículo</a>
                 <a id="enlaceEliminar" class="boton eliminar">Eliminar vehículo</a>
             </div>
-            </div>
         </section>
     </main>
 
@@ -267,8 +266,7 @@
     <script>
 
         const token = sessionStorage.getItem('token');
-        const partesURL = window.location.pathname.split('/').filter(Boolean);
-        const autoId = partesURL[partesURL.length - 1];
+        const autoId = '{{ auto_id }}';
         const mensaje = document.getElementById('mensaje');
         const datosVehiculo = document.getElementById('datosVehiculo');
 

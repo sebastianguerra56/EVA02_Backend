@@ -10,6 +10,7 @@ urlpatterns = [
     path('ver/<int:auto_id>/', views.ver_auto, name='ver_auto'),
     path('editar/<int:auto_id>/', views.editar_auto, name='editar_auto'),
     path('eliminar/<int:auto_id>/', views.eliminar_auto, name='eliminar_auto'),
+    path('confirmacion/<int:auto_id>/', views.confirmacion_auto, name='confirmacion_auto'),
 
     #API login
     path('api/login/', views.LoginAPIView.as_view(), name='api_login'),

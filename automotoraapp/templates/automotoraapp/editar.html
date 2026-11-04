@@ -67,53 +67,91 @@
       color: #ccc;
       margin-bottom: 5px;
     }
+    .capitalizar {
+    text-transform: capitalize;
+    }
+    input[type="text"] {
+    text-transform: capitalize;
+    }
+    .enlaces-volver {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    }
+    .contenedor-imagen {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .auto-img {
+        width: 100%;
+        max-width: 450px;
+        max-height: 280px;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+    }
+    #mensaje {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #ff6600;
+        margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Editar auto</h1>
+  <h1>Editar Vehículo</h1>
 
   <div class="form-container">
     <p id="mensaje" role="status" aria-live="polite">Cargando vehículo...</p>
+    <div class="contenedor-imagen">
+    <img
+        id="imagenVehiculo"
+        class="auto-img"
+        alt="Imagen del vehículo"
+        hidden
+    >
+    </div>
     <form id="formEditar" hidden>
       <div class="mb-3">
-        <div class="texto-actual">Marca actual: {{ auto.marca|capfirst }}</div>
+        <div class="texto-actual">Marca actual: <span id="marcaActual" class="capitalizar"></span></div>
         <label for="marca">Nueva Marca:</label>
-        <input type="text" id="marca" name="marca" class="form-control" value="{{ auto.marca|capfirst }}" required>
+        <input type="text" id="marca" name="marca" class="form-control" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Modelo actual: {{ auto.modelo|capfirst }}</div>
+        <div class="texto-actual">Modelo actual: <span id="modeloActual" class="capitalizar"></span></div>
         <label for="modelo">Nuevo Modelo:</label>
-        <input type="text" id="modelo" name="modelo" class="form-control" value="{{ auto.modelo|capfirst }}" required>
+        <input type="text" id="modelo" name="modelo" class="form-control" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Año actual: {{ auto.año }}</div>
+        <div class="texto-actual">Año actual: <span id="añoActual"></span></div>
         <label for="año">Nuevo Año:</label>
-        <input type="number" id="año" name="año" class="form-control" value="{{ auto.año }}" min="1900" max="2026" required>
+        <input type="number" id="año" name="año" class="form-control" min="1900" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Color actual: {{ auto.color|capfirst }}</div>
+        <div class="texto-actual">Color actual: <span id="colorActual" class="capitalizar"></span></div>
         <label for="color">Nuevo Color:</label>
-        <input type="text" id="color" name="color" class="form-control" value="{{ auto.color|capfirst }}" required>
+        <input type="text" id="color" name="color" class="form-control" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Precio actual: {{ auto.precio }}</div>
+        <div class="texto-actual">Precio actual: <span id="precioActual"></span></div>
         <label for="precio">Nuevo Precio:</label>
-        <input type="number" id="precio" name="precio" class="form-control" value="{{ auto.precio }}" min="0" step="1000" required>
+        <input type="number" id="precio" name="precio" class="form-control" min="0" step="1000" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Kilometraje actual: {{ auto.kilometraje }}</div>
+        <div class="texto-actual">Kilometraje actual: <span id="kilometrajeActual"></span></div>
         <label for="kilometraje">Nuevo Kilometraje:</label>
-        <input type="number" id="kilometraje" name="kilometraje" class="form-control" value="{{ auto.kilometraje }}" min="0" required>
+        <input type="number" id="kilometraje" name="kilometraje" class="form-control" min="0" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Tipo de combustible actual: {{ auto.tipo_combustible|capfirst }}</div>
+        <div class="texto-actual">Tipo de combustible actual: <span id="tipo_combustibleActual" class="capitalizar"></span></div>
         <label for="tipo_combustible">Nuevo Tipo de Combustible:</label>
         <select id="tipo_combustible" name="tipo_combustible" class="form-select" required>
           <option value="gasolina">Gasolina</option>
@@ -124,7 +162,7 @@
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Transmisión actual: {{ auto.transmision|capfirst }}</div>
+        <div class="texto-actual">Transmisión actual: <span id="transmisionActual" class="capitalizar"></span></div>
         <label for="transmision">Nueva Transmisión:</label>
         <select id="transmision" name="transmision" class="form-select" required>
           <option value="manual">Manual</option>
@@ -133,33 +171,28 @@
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Número de puertas actual: {{ auto.numero_puertas }}</div>
+        <div class="texto-actual">Número de puertas actual: <span id="numero_puertasActual"></span></div>
         <label for="numero_puertas">Nuevo Número de Puertas:</label>
-        <input type="number" id="numero_puertas" name="numero_puertas" class="form-control" value="{{ auto.numero_puertas }}" min="2" max="5" required>
+        <input type="number" id="numero_puertas" name="numero_puertas" class="form-control" min="2" max="5" required>
       </div>
 
       <div class="mb-3">
-        <div class="texto-actual">Fecha de registro actual: {{ auto.fecha_registro }}</div>
-        <label for="fecha_registro">Nueva Fecha de Registro:</label>
-        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" value="{{ auto.fecha_registro }}" required>
+        <div class="texto-actual">Fecha de registro actual: <span id="fecha_registroActual"></span></div>
       </div>
 
       <button type="submit" class="btn-naranja w-100">GUARDAR CAMBIOS</button>
     </form>
   </div>
-
-  <a href="/">← Volver al inicio</a>
+  <div class = "enlaces-volver">
+    <a href="/inicio/">← Volver al inicio</a>
+    <a href="/catalogo/">← Volver al catalogo</a>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const token = sessionStorage.getItem('token');
 
-    // Obtener el ID desde una dirección como /editar/3/
-    const partesURL = window.location.pathname
-        .split('/')
-        .filter(Boolean);
-
-    const autoId = partesURL[partesURL.length - 1];
+    const autoId = '{{ auto_id }}';
 
     const formulario = document.getElementById('formEditar');
     const mensaje = document.getElementById('mensaje');
@@ -214,16 +247,27 @@
             for (const campo of campos) {
                 document.getElementById(campo).value = vehiculo[campo];
             }
+            document.getElementById('marcaActual').textContent = vehiculo.marca;
+            document.getElementById('modeloActual').textContent = vehiculo.modelo;
+            document.getElementById('añoActual').textContent = vehiculo.año;
+            document.getElementById('colorActual').textContent = vehiculo.color;
+            document.getElementById('precioActual').textContent = `$${vehiculo.precio}`;
+            document.getElementById('kilometrajeActual').textContent = vehiculo.kilometraje;
+            document.getElementById('tipo_combustibleActual').textContent = vehiculo.tipo_combustible;
+            document.getElementById('transmisionActual').textContent = vehiculo.transmision;
+            document.getElementById('numero_puertasActual').textContent = vehiculo.numero_puertas;
+            document.getElementById('fecha_registroActual').textContent = vehiculo.fecha_registro;
+            document.getElementById('año').max = new Date().getFullYear();
 
-            document.getElementById('fecha_registro').value =
-                vehiculo.fecha_registro;
-
-            document.getElementById('año').max =
-                new Date().getFullYear();
+            const rutaImagenes = "{% static 'automotoraapp/img/' %}";
+            const imagen = document.getElementById('imagenVehiculo');
+            imagen.src = `${rutaImagenes}${vehiculo.marca.toLowerCase()}-${vehiculo.modelo.toLowerCase()}.png`;
+            imagen.alt = `${vehiculo.marca} ${vehiculo.modelo}`;
+            imagen.hidden = false;
 
             formulario.hidden = false;
-            mensaje.textContent = `Editando vehículo #${vehiculo.id}`;
-
+            mensaje.textContent = `${vehiculo.marca} ${vehiculo.modelo}`;
+            mensaje.classList.add('capitalizar');
         } catch (error) {
             console.error(error);
             mensaje.textContent = error.message;
@@ -288,8 +332,7 @@
                 );
             }
 
-            mensaje.textContent = 'Vehículo actualizado correctamente.';
-            window.location.href = '/catalogo/';
+            window.location.href = `/confirmacion/${autoId}/`;
 
         } catch (error) {
             console.error(error);

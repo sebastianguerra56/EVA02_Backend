@@ -23,23 +23,16 @@ def catalogo(request):
     return render(request, 'automotoraapp/catalogo.html')
 
 def ver_auto(request, auto_id):
-    return render(request, 'automotoraapp/ver.html')
-
+    return render(request, 'automotoraapp/ver.html', {'auto_id': auto_id})
 
 def editar_auto(request, auto_id):
-    auto = get_object_or_404(Vehiculo, id=auto_id)
-
-    return render(request, 'automotoraapp/editar.html', {
-        'auto': auto
-    })
-
+    return render(request, 'automotoraapp/editar.html', {'auto_id': auto_id})
 
 def eliminar_auto(request, auto_id):
-    auto = get_object_or_404(Vehiculo, id=auto_id)
+    return render(request, 'automotoraapp/eliminar.html', {'auto_id': auto_id})
 
-    return render(request, 'automotoraapp/eliminar.html', {
-        'auto': auto
-    })
+def confirmacion_auto(request, auto_id):
+    return render(request, 'automotoraapp/confirmacion.html', {'auto_id': auto_id})
 
 def login(request):
     return render(request, 'automotoraapp/login.html')
@@ -165,6 +158,7 @@ class VehiculoDetalleAPIView(APIView):
         vehiculo.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
     #PUT: actualizar todos los campos editables de un vehículo
     def put(self, request, auto_id):
         vehiculo = get_object_or_404(Vehiculo, id=auto_id)
@@ -197,14 +191,14 @@ class VehiculoDetalleAPIView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # Asignar los nuevos datos al vehículo
-        vehiculo.marca = marca
-        vehiculo.modelo = modelo
+        vehiculo.marca = marca.lower()
+        vehiculo.modelo = modelo.lower()
         vehiculo.año = año
-        vehiculo.color = color
+        vehiculo.color = color.lower()
         vehiculo.precio = precio
         vehiculo.kilometraje = kilometraje
-        vehiculo.tipo_combustible = tipo_combustible
-        vehiculo.transmision = transmision
+        vehiculo.tipo_combustible = tipo_combustible.lower()
+        vehiculo.transmision = transmision.lower()
         vehiculo.numero_puertas = numero_puertas
 
         # Guardar los cambios en la base de datos
