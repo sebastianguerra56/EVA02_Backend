@@ -12,7 +12,7 @@ from rest_framework.authentication import TokenAuthentication
 
 from .models import Vehiculo
 
-# Create your views here.
+
 def inicio(request):
     return render(request, 'automotoraapp/inicio.html')
 
